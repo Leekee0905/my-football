@@ -1,5 +1,6 @@
 export const TABLE_HEADER = [
   "순위",
+  "",
   "클럽",
   "경기수",
   "승",
