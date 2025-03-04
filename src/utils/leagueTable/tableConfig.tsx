@@ -28,7 +28,7 @@ const columnMap: { [header: string]: any } = {
   순위: {
     header: "순위",
     accessor: (team: StandingEntry) => team.position,
-    className: "text-center",
+    className: "",
   },
   "": {
     header: "",
@@ -46,53 +46,53 @@ const columnMap: { [header: string]: any } = {
   },
   클럽: {
     header: "팀명",
-    accessor: (team: StandingEntry) => team.team.shortName,
-    className: "w-3/12 text-center",
+    accessor: (team: StandingEntry) => team.team.tla,
+    className: "",
   },
   경기수: {
     header: "경기 수",
     accessor: (team: StandingEntry) => team.playedGames,
-    className: "w-3/12 text-center",
+    className: "",
   },
   승: {
     header: "승",
     accessor: (team: StandingEntry) => team.won,
-    className: "w-1/12 text-center",
+    className: "",
   },
   무: {
     header: "무",
     accessor: (team: StandingEntry) => team.draw,
-    className: "w-1/12 text-center",
+    className: "",
   },
   패: {
     header: "패",
     accessor: (team: StandingEntry) => team.lost,
-    className: "w-1/12 text-center",
+    className: "",
   },
   승점: {
     header: "승점",
     accessor: (team: StandingEntry) => team.points,
-    className: "w-3/12 text-center",
+    className: "",
   },
   득점: {
     header: "득점",
     accessor: (team: StandingEntry) => team.goalsFor,
-    className: "w-2/12 text-center",
+    className: "",
   },
   실점: {
     header: "실점",
     accessor: (team: StandingEntry) => team.goalsAgainst,
-    className: "w-2/12 text-center",
+    className: "",
   },
   득실차: {
     header: "득실차",
     accessor: (team: StandingEntry) => team.goalDifference,
-    className: "w-2/12 text-center",
+    className: "",
   },
   "최근 5경기": {
     header: "최근 5경기",
     accessor: (team: StandingEntry) => team.form,
-    className: "w-3/12 text-center",
+    className: "",
   },
 };
 
