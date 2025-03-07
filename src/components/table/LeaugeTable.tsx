@@ -9,15 +9,11 @@ import {
   getTableColumns,
 } from "@/utils/leagueTable/tableConfig";
 import useLeagueStore from "@/hooks/useLeagueStore";
-import getThisSeason from "@/utils/getThisSeason";
 
-const LeagueTable = () => {
+const LeagueTable = ({ season }: { season: number }) => {
   const pathname = usePathname();
-  const { league, season } = useLeagueStore((state) => state);
-  const { data, isLoading } = useGetLeagueTableQuery(
-    league,
-    pathname.includes("table") ? season : getThisSeason()
-  );
+  const { league } = useLeagueStore((state) => state);
+  const { data, isLoading } = useGetLeagueTableQuery(league, season);
 
   const TABLE_HEADER = getTableHeader(pathname);
   const TABLE_COLUMNS = getTableColumns(pathname);
