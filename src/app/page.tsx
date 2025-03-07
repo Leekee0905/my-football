@@ -2,6 +2,7 @@
 import LeagueButtonContainer from "@/components/button/LeagueButtonContainer";
 import LeagueTable from "@/components/table/LeaugeTable";
 import ScheduleContainer from "@/components/schedule/ScheduleContainer";
+import getThisSeason from "@/utils/getThisSeason";
 
 const Home = () => {
   const date = new Date();
@@ -15,7 +16,7 @@ const Home = () => {
       <h2 className="text-xl font-bold">{thisSeason}</h2>
       <LeagueButtonContainer />
       <div className="grid grid-cols-2 gap-4">
-        <LeagueTable />
+        <LeagueTable season={getThisSeason()} />
         <ScheduleContainer />
       </div>
     </div>
