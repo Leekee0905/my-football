@@ -1,18 +1,22 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import type { Metadata } from "next";
+import { Noto_Sans_KR, Roboto } from "next/font/google";
 import Footer from "@/components/layouts/Footer";
 import Header from "@/components/layouts/Header";
 import Providers from "@/provider/queryProvider";
+import { LeagueStoreProvider } from "@/provider/leagueProvider";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import cls from "@/utils/cls";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const notoSansKr = Noto_Sans_KR({
+  weight: ["400"],
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const roboto = Roboto({
+  weight: ["400"],
   subsets: ["latin"],
+  variable: "--roboto",
 });
 
 export const metadata: Metadata = {
@@ -35,12 +39,18 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col max-w-[1440px] mx-auto bg-gray-100`}
+        className={`${cls(
+          notoSansKr.className,
+          roboto.variable
+        )} antialiased flex flex-col `}
       >
         <Providers>
-          <Header />
-          <main className="px-[120px]">{children}</main>
-          <Footer />
+          <LeagueStoreProvider>
+            <Header />
+            <main className="max-w-[1440px] mx-auto">{children}</main>
+            <Footer />
+          </LeagueStoreProvider>
+          <ReactQueryDevtools initialIsOpen={false} />
         </Providers>
       </body>
     </html>
