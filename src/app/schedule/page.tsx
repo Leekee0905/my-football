@@ -1,5 +1,11 @@
+import ScheduleContainer from "@/components/schedule/ScheduleContainer";
+
 const Schedule = () => {
-  return <div></div>;
+  return (
+    <div>
+      <ScheduleContainer />
+    </div>
+  );
 };
 
 export default Schedule;
