@@ -1,8 +1,14 @@
-// tableConfig.tsx
+"use client";
 import { StandingEntry } from "@/types/tableDataType.type";
 import Image from "next/image";
+import winLoseDrawColorConverter from "./winLoseDrawColorConverter";
 
-// URL에 따라 헤더 배열을 반환합니다.
+type ColumnConfig<T> = {
+  header: string;
+  accessor: (team: T, pathname: string) => React.ReactNode;
+  className: string;
+};
+
 export const getTableHeader = (pathname: string): string[] => {
   if (pathname.includes("table")) {
     return [
@@ -23,8 +29,7 @@ export const getTableHeader = (pathname: string): string[] => {
   return ["순위", "", "클럽", "경기수", "승", "무", "패", "승점"];
 };
 
-// 각 헤더에 해당하는 컬럼 구성 객체를 미리 정의합니다.
-const columnMap: { [header: string]: any } = {
+const columnMap: Record<string, ColumnConfig<StandingEntry>> = {
   순위: {
     header: "순위",
     accessor: (team: StandingEntry) => team.position,
@@ -46,7 +51,8 @@ const columnMap: { [header: string]: any } = {
   },
   클럽: {
     header: "팀명",
-    accessor: (team: StandingEntry) => team.team.tla,
+    accessor: (team: StandingEntry, pathname: string) =>
+      pathname.includes("table") ? team.team.shortName : team.team.tla,
     className: "",
   },
   경기수: {
@@ -72,7 +78,7 @@ const columnMap: { [header: string]: any } = {
   승점: {
     header: "승점",
     accessor: (team: StandingEntry) => team.points,
-    className: "",
+    className: "text-blue-500 font-bold",
   },
   득점: {
     header: "득점",
@@ -91,12 +97,12 @@ const columnMap: { [header: string]: any } = {
   },
   "최근 5경기": {
     header: "최근 5경기",
-    accessor: (team: StandingEntry) => team.form,
+    accessor: (team: StandingEntry) =>
+      winLoseDrawColorConverter(team.form.split(",")),
     className: "",
   },
 };
 
-// 헤더 배열의 순서를 기반으로 컬럼 배열을 생성합니다.
 export const getTableColumns = (pathname: string) => {
   const headers = getTableHeader(pathname);
   const sortedColumns = headers
