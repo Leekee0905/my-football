@@ -1,9 +1,9 @@
-import React from "react";
+import { ROWS_COUNT } from "@/constants/table";
 
-const SkeletonTable = ({ columnsCount = 8, rowsCount = 20 }) => {
+const SkeletonTable = ({ columnsCount = 8 }) => {
   return (
     <>
-      {Array.from({ length: rowsCount }).map((_, rowIndex) => (
+      {Array.from({ length: ROWS_COUNT }).map((_, rowIndex) => (
         <tr key={rowIndex}>
           {Array.from({ length: columnsCount }).map((_, colIndex) => (
             <td key={colIndex}>
