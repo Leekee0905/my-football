@@ -1,23 +1,24 @@
 "use client";
-import useLeagueStore from "@/hooks/useLeagueStore";
+
 import getThisSeason from "@/utils/getThisSeason";
 
-const SeasonNavigationButton = () => {
-  const { season, setSeason } = useLeagueStore((state) => state);
+type SeasonNavigationButtonProps = {
+  season: number;
+  handlePrev: () => void;
+  handleNext: () => void;
+};
 
-  const handlePrevious = () => {
-    setSeason(season - 1);
-  };
-
-  const handleNext = () => {
-    setSeason(season + 1);
-  };
+const SeasonNavigationButton = ({
+  season,
+  handlePrev,
+  handleNext,
+}: SeasonNavigationButtonProps) => {
   const isPreviousDisabled = season === getThisSeason() - 1;
   const isNextDisabled = season === getThisSeason();
   return (
     <div className="flex justify-center items-center space-x-4">
       <button
-        onClick={handlePrevious}
+        onClick={handlePrev}
         className="px-4 py-2 text-black text-xl rounded-lg"
         disabled={isPreviousDisabled}
       >
