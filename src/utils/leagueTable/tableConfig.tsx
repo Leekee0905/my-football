@@ -1,7 +1,7 @@
 "use client";
 import { StandingEntry } from "@/types/tableDataType.type";
 import Image from "next/image";
-import winLoseDrawColorConverter from "./winLoseDrawColorConverter";
+import WinLoseDrawColorIndicator from "@/components/table/WinLoseDrawColorIndicator";
 
 type ColumnConfig<T> = {
   header: string;
@@ -98,7 +98,7 @@ const columnMap: Record<string, ColumnConfig<StandingEntry>> = {
   "최근 5경기": {
     header: "최근 5경기",
     accessor: (team: StandingEntry) =>
-      winLoseDrawColorConverter(team.form.split(",")),
+      WinLoseDrawColorIndicator(team.form.split(",")),
     className: "",
   },
 };
