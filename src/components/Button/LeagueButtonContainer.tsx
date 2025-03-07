@@ -1,25 +1,20 @@
+"use client";
 import { LEAGUE } from "@/constants/leagues";
 import LeagueButton from "./LeagueButton";
+import { memo } from "react";
+import useLeagueStore from "@/hooks/useLeagueStore";
 
-type LeagueButtonContainerProps = {
-  currentTableLeagueName: string;
-  onClick: (leagueName: string) => void;
-};
-
-const LeagueButtonContainer = ({
-  currentTableLeagueName,
-  onClick,
-}: LeagueButtonContainerProps) => {
+const LeagueButtonContainer = () => {
+  const leagueName = useLeagueStore((state) => state.league);
   return (
     <div className="flex justify-center items-center">
       <div className="flex w-full max-w-max gap-4">
         {Object.keys(LEAGUE).map((leagueKey) => {
-          const isActive = currentTableLeagueName === leagueKey;
+          const isActive = leagueName === leagueKey;
           return (
             <LeagueButton
               key={leagueKey}
               isActive={isActive}
-              onClick={onClick}
               leagueKey={leagueKey}
             />
           );
@@ -29,4 +24,4 @@ const LeagueButtonContainer = ({
   );
 };
 
-export default LeagueButtonContainer;
+export default memo(LeagueButtonContainer);
