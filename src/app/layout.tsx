@@ -7,6 +7,15 @@ import Providers from "@/provider/queryProvider";
 import { LeagueStoreProvider } from "@/provider/leagueProvider";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import cls from "@/utils/cls";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
+import { QUERY_KEYS } from "@/hooks/queryKeys";
+import getWeeklyLeagueSchedule from "@/fetch/getWeeklyLeagueSchedule";
+import getThisSeason from "@/utils/getThisSeason";
+import getLeagueTable from "@/fetch/getLeagueTable";
 
 const notoSansKr = Noto_Sans_KR({
   weight: ["400"],
@@ -24,11 +33,23 @@ export const metadata: Metadata = {
   description: "해외 축구 정보를 제공하는 간단한 웹사이트 입니다.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: QUERY_KEYS.leagueTable("PL", getThisSeason()),
+    queryFn: () => getLeagueTable("PL", getThisSeason()),
+  });
+
+  await queryClient.prefetchQuery({
+    queryKey: QUERY_KEYS.weeklyLeagueSchedule("PL"),
+    queryFn: () => getWeeklyLeagueSchedule("PL"),
+  });
+
   return (
     <html lang="en" className="overflow-x-hidden">
       <head>
@@ -45,12 +66,14 @@ export default function RootLayout({
         )} antialiased flex flex-col `}
       >
         <Providers>
-          <LeagueStoreProvider>
-            <Header />
-            <main className="max-w-[1440px] mx-auto">{children}</main>
-            <Footer />
-          </LeagueStoreProvider>
-          <ReactQueryDevtools initialIsOpen={false} />
+          <HydrationBoundary state={dehydrate(queryClient)}>
+            <LeagueStoreProvider>
+              <Header />
+              <main className="max-w-[1440px] mx-auto py-4">{children}</main>
+              <Footer />
+            </LeagueStoreProvider>
+            <ReactQueryDevtools initialIsOpen={false} />
+          </HydrationBoundary>
         </Providers>
       </body>
     </html>
