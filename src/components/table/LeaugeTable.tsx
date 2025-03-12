@@ -1,25 +1,27 @@
 "use client";
 import { usePathname } from "next/navigation";
-import useGetLeagueTableQuery from "@/hooks/useGetLeagueTable";
-import { StandingEntry } from "@/types/tableDataType.type";
+import { LeagueDataType, StandingEntry } from "@/types/tableDataType.type";
 import SkeletonTable from "./SkeletonTable";
 import LeagueTableRow from "./LeagueTableRow";
 import {
   getTableHeader,
   getTableColumns,
 } from "@/utils/leagueTable/tableConfig";
-import useLeagueStore from "@/hooks/useLeagueStore";
 
-const LeagueTable = ({ season }: { season: number }) => {
-  const pathname = usePathname();
-  const { league } = useLeagueStore((state) => state);
-  const { data, isLoading } = useGetLeagueTableQuery(league, season);
-
-  const TABLE_HEADER = getTableHeader(pathname);
-  const TABLE_COLUMNS = getTableColumns(pathname);
-  const SKELETON_COLUMNS = pathname.includes("table") ? 12 : 8;
+const LeagueTable = ({
+  data,
+  isLoading,
+}: {
+  data: LeagueDataType | undefined;
+  isLoading: boolean;
+}) => {
+  const pathName = usePathname();
+  const TABLE_HEADER = getTableHeader(pathName);
+  const TABLE_COLUMNS = getTableColumns(pathName);
+  const SKELETON_COLUMNS = pathName.includes("table") ? 12 : 8;
+  const tableData = data?.standings[0].table;
   return (
-    <div className="flex flex-col justify-center items-center">
+    <div className="flex flex-col  items-center">
       <table className="table-fixed w-full px-4 border-collapse">
         <thead>
           <tr>
@@ -41,11 +43,12 @@ const LeagueTable = ({ season }: { season: number }) => {
           {isLoading ? (
             <SkeletonTable columnsCount={SKELETON_COLUMNS} />
           ) : (
-            data?.standings[0].table.map((team: StandingEntry) => (
+            tableData?.map((team: StandingEntry) => (
               <LeagueTableRow
                 key={team.team.id}
                 team={team}
                 columns={TABLE_COLUMNS}
+                pathName={pathName}
               />
             ))
           )}

@@ -1,19 +1,18 @@
 "use client";
 import { StandingEntry } from "@/types/tableDataType.type";
 import positionBorderColorMaker from "@/utils/leagueTable/positionBorderColorMaker";
-import { usePathname } from "next/navigation";
 
 interface LeagueTableRowProps {
   team: StandingEntry;
   columns: {
     header: string;
-    accessor: (team: StandingEntry, pathname: string) => React.ReactNode;
+    accessor: (team: StandingEntry, pathName: string) => React.ReactNode;
     className: string;
   }[];
+  pathName: string;
 }
 
-const LeagueTableRow = ({ team, columns }: LeagueTableRowProps) => {
-  const pathname = usePathname();
+const LeagueTableRow = ({ team, columns, pathName }: LeagueTableRowProps) => {
   return (
     <tr className={`${positionBorderColorMaker(team.position)} border-t-2`}>
       {columns.map((col, index) => (
@@ -21,7 +20,7 @@ const LeagueTableRow = ({ team, columns }: LeagueTableRowProps) => {
           key={index}
           className={`text-center px-4 py-2 font-roboto ${col.className}`}
         >
-          {col.accessor(team, pathname)}
+          {col.accessor(team, pathName)}
         </td>
       ))}
     </tr>

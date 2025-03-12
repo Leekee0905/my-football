@@ -2,28 +2,26 @@
 import LeagueButtonContainer from "@/components/button/LeagueButtonContainer";
 import SeasonNavigationButton from "@/components/button/SeasonNavigationButton";
 import LeagueTable from "@/components/table/LeaugeTable";
-import getThisSeason from "@/utils/getThisSeason";
-import { useState } from "react";
+import useGetLeagueTableQuery from "@/hooks/useGetLeagueTable";
+import useLeagueStore from "@/hooks/useLeagueStore";
+import useSeason from "@/hooks/useSeason";
 
 const Table = () => {
-  const [currentSeason, setCurrentSeason] = useState(getThisSeason());
-
-  const handlePrev = () => {
-    setCurrentSeason((prev) => prev - 1);
-  };
-  const handleNext = () => {
-    setCurrentSeason((prev) => prev + 1);
-  };
-
+  const { season, handlePrev, handleNext } = useSeason();
+  const { league } = useLeagueStore((state) => state);
+  const { data: tableData, isLoading: isTableLoading } = useGetLeagueTableQuery(
+    league,
+    season
+  );
   return (
     <div className="max-w-[1200px] flex flex-col justify-center items-center gap-4">
       <SeasonNavigationButton
-        season={currentSeason}
+        season={season}
         handlePrev={handlePrev}
         handleNext={handleNext}
       />
       <LeagueButtonContainer />
-      <LeagueTable season={currentSeason} />
+      <LeagueTable data={tableData} isLoading={isTableLoading} />
     </div>
   );
 };
