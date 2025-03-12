@@ -7,7 +7,7 @@ import useLeagueStore from "@/hooks/useLeagueStore";
 const LeagueButtonContainer = () => {
   const leagueName = useLeagueStore((state) => state.league);
   return (
-    <div className="flex justify-center items-center">
+    <div className="flex justify-center items-center w-full">
       <div className="flex w-full max-w-max gap-4">
         {Object.keys(LEAGUE).map((leagueKey) => {
           const isActive = leagueName === leagueKey;
