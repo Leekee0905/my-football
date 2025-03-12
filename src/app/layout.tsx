@@ -31,6 +31,9 @@ const roboto = Roboto({
 export const metadata: Metadata = {
   title: "MyFootball",
   description: "해외 축구 정보를 제공하는 간단한 웹사이트 입니다.",
+  icons: {
+    icon: "/assets/images/logo/logo.ico?v=2",
+  },
 };
 
 export default async function RootLayout({
@@ -69,7 +72,9 @@ export default async function RootLayout({
           <HydrationBoundary state={dehydrate(queryClient)}>
             <LeagueStoreProvider>
               <Header />
-              <main className="max-w-[1440px] mx-auto py-4">{children}</main>
+              <main className="max-w-[1440px] min-h-screen mx-auto py-4">
+                {children}
+              </main>
               <Footer />
             </LeagueStoreProvider>
             <ReactQueryDevtools initialIsOpen={false} />
