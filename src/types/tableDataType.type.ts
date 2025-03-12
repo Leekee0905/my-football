@@ -1,15 +1,15 @@
-interface LeagueFilter {
+export interface LeagueFilter {
   season: string;
 }
 
-interface Area {
+export interface Area {
   id: number;
   name: string;
   code: string;
   flag: string;
 }
 
-interface Competition {
+export interface Competition {
   id: number;
   name: string;
   code: string;
@@ -17,7 +17,7 @@ interface Competition {
   emblem: string;
 }
 
-interface Season {
+export interface Season {
   id: number;
   startDate: string;
   endDate: string;
@@ -55,7 +55,7 @@ export interface Standing {
   table: StandingEntry[];
 }
 
-export interface PremierLeagueData {
+export interface LeagueDataType {
   filters: LeagueFilter;
   area: Area;
   competition: Competition;
