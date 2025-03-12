@@ -1,9 +1,9 @@
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { QUERY_KEYS } from "./queryKeys";
 import getWeeklyLeagueSchedule from "@/fetch/getWeeklyLeagueSchedule";
 
 const useGetWeeklyLeagueSchedule = (league: string) => {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: QUERY_KEYS.weeklyLeagueSchedule(league),
     queryFn: () => getWeeklyLeagueSchedule(league),
   });
