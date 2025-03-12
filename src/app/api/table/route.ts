@@ -1,4 +1,4 @@
-import { PremierLeagueData } from "@/types/tableDataType.type";
+import { LeagueDataType } from "@/types/tableDataType.type";
 import { NextRequest } from "next/server";
 
 export const GET = async (request: NextRequest) => {
@@ -21,7 +21,7 @@ export const GET = async (request: NextRequest) => {
       "X-Auth-Token": process.env.NEXT_PUBLIC_FOOTBALL_API_KEY as string,
     },
   });
-  const data: PremierLeagueData = await res.json();
+  const data: LeagueDataType = await res.json();
 
   return Response.json(data);
 };
