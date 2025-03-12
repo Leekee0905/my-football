@@ -1,29 +1,12 @@
-import { GetScheduleType, Match } from "@/types/scheduleDataType.type";
+import { GetScheduleType } from "@/types/scheduleDataType.type";
+import fetchWithRetry from "@/utils/fetchWithRetry";
+import {
+  formatDate,
+  groupMatchesByDate,
+} from "@/utils/schedule/formatMatchDay";
+
 import { NextRequest } from "next/server";
-
-const formatDate = (date: Date): string => {
-  return date
-    .toLocaleDateString("ko-KR")
-    .slice(0, -1)
-    .split(". ")
-    .map((str) => (str.length < 2 ? str.padStart(2, "0") : str))
-    .join("-");
-};
-
-const groupMatchesByDate = (matches: Match[]): Record<string, Match[]> => {
-  return matches.reduce((acc, match) => {
-    const date = new Date(match.utcDate);
-    const dateParts = formatDate(date).split("-");
-    const day = date.toLocaleDateString("ko-KR", { weekday: "short" });
-    const formattedDate = `${dateParts[1]}월 ${dateParts[2]}일 (${day})`;
-
-    if (!acc[formattedDate]) acc[formattedDate] = [];
-    acc[formattedDate].push(match);
-
-    return acc;
-  }, {} as Record<string, Match[]>);
-};
-
+export const config = { runtime: "edge" };
 export const GET = async (request: NextRequest) => {
   const searchParams = request.nextUrl.searchParams;
   const league = searchParams.get("league");
@@ -51,19 +34,26 @@ export const GET = async (request: NextRequest) => {
   if (!apiKey)
     return Response.json({ error: "API key is missing" }, { status: 500 });
 
-  const res = await fetch(apiUrl.toString(), {
-    headers: { "X-Auth-Token": apiKey },
-  });
+  try {
+    const timeout = new Promise<Response>((_, reject) =>
+      setTimeout(() => reject(new Error("Request timeout")), 5000)
+    );
 
-  if (!res.ok) {
-    return Response.json(
-      { error: "Failed to fetch data" },
-      { status: res.status }
+    const res = await Promise.race([
+      fetchWithRetry(apiUrl.toString(), {
+        headers: { "X-Auth-Token": apiKey },
+      }),
+      timeout,
+    ]);
+    const data: GetScheduleType = await res.json();
+    const groupedMatches = groupMatchesByDate(data.matches);
+
+    return Response.json(groupedMatches);
+  } catch (error) {
+    console.error("Fetch failed", error);
+    throw Response.json(
+      { error: "Too many requests or timeout. Try again later." },
+      { status: 429 }
     );
   }
-
-  const data: GetScheduleType = await res.json();
-  const groupedMatches = groupMatchesByDate(data.matches);
-
-  return Response.json(groupedMatches);
 };
