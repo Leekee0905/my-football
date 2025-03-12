@@ -1,4 +1,5 @@
 "use client";
+import UnexpectedError from "@/components/UnexpectedError";
 import { useEffect } from "react";
 
 const Error = ({
@@ -12,6 +13,10 @@ const Error = ({
     console.error(error);
   }, [error]);
 
-  return <div>error</div>;
+  return (
+    <div className="flex flex-col">
+      <UnexpectedError error={error} reset={reset} />
+    </div>
+  );
 };
 export default Error;
