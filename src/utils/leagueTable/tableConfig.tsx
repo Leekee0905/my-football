@@ -5,12 +5,12 @@ import WinLoseDrawColorIndicator from "@/components/table/WinLoseDrawColorIndica
 
 type ColumnConfig<T> = {
   header: string;
-  accessor: (team: T, pathname: string) => React.ReactNode;
+  accessor: (team: T, pathName: string) => React.ReactNode;
   className: string;
 };
 
-export const getTableHeader = (pathname: string): string[] => {
-  if (pathname.includes("table")) {
+export const getTableHeader = (pathName: string): string[] => {
+  if (pathName.includes("table")) {
     return [
       "순위",
       "",
@@ -51,8 +51,8 @@ const columnMap: Record<string, ColumnConfig<StandingEntry>> = {
   },
   클럽: {
     header: "팀명",
-    accessor: (team: StandingEntry, pathname: string) =>
-      pathname.includes("table") ? team.team.shortName : team.team.tla,
+    accessor: (team: StandingEntry, pathName: string) =>
+      pathName.includes("table") ? team.team.shortName : team.team.tla,
     className: "",
   },
   경기수: {
@@ -103,8 +103,8 @@ const columnMap: Record<string, ColumnConfig<StandingEntry>> = {
   },
 };
 
-export const getTableColumns = (pathname: string) => {
-  const headers = getTableHeader(pathname);
+export const getTableColumns = (pathName: string) => {
+  const headers = getTableHeader(pathName);
   const sortedColumns = headers
     .map((header) => columnMap[header])
     .filter(Boolean);
