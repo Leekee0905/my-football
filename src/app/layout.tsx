@@ -42,10 +42,10 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const queryClient = new QueryClient();
-
+  const season = getThisSeason();
   await queryClient.prefetchQuery({
-    queryKey: QUERY_KEYS.leagueTable("PL", getThisSeason()),
-    queryFn: () => getLeagueTable("PL", getThisSeason()),
+    queryKey: QUERY_KEYS.leagueTable("PL", season),
+    queryFn: () => getLeagueTable("PL", season),
   });
 
   await queryClient.prefetchQuery({
