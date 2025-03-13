@@ -1,6 +1,6 @@
 const getSeasonTeams = async (league: string, season: number) => {
   const url = `${process.env.NEXT_PUBLIC_BASE_URL}/api/schedule/teams?league=${league}&season=${season}`;
-  const res = await fetch(url);
+  const res = await fetch(url, { next: { revalidate: 0 } });
   const data = await res.json();
   if (!res.ok) {
     throw new Error("에러");
