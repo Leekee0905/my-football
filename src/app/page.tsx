@@ -7,6 +7,7 @@ import useGetWeeklyLeagueSchedule from "@/hooks/useGetWeeklyLeagueSchedule";
 import useLeagueStore from "@/hooks/useLeagueStore";
 import useGetLeagueTableQuery from "@/hooks/useGetLeagueTable";
 import SkeletonSchedule from "@/components/schedule/SkeletonSchedule";
+import { useMemo } from "react";
 
 const Home = () => {
   const date = new Date();
@@ -14,7 +15,7 @@ const Home = () => {
     date.getMonth() + 1 > 7
       ? `${date.getFullYear()}-${date.getFullYear() + 1} 시즌`
       : `${date.getFullYear() - 1}-${date.getFullYear()} 시즌`;
-
+  const season = useMemo(() => getThisSeason(), []);
   const leagueName = useLeagueStore((state) => state.league);
   const { data: weeklyMatch, isLoading: isMatchLoading } =
     useGetWeeklyLeagueSchedule(leagueName);
@@ -22,7 +23,7 @@ const Home = () => {
   const { league } = useLeagueStore((state) => state);
   const { data: tableData, isLoading: isTableLoading } = useGetLeagueTableQuery(
     league,
-    getThisSeason()
+    season
   );
 
   return (
