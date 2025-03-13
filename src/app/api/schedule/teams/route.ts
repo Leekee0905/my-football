@@ -1,4 +1,5 @@
 import { TeamsDataType } from "@/types/teamsDataType.type";
+import fetchWithRetry from "@/utils/fetchWithRetry";
 import { NextRequest } from "next/server";
 
 export const GET = async (request: NextRequest) => {
@@ -16,12 +17,30 @@ export const GET = async (request: NextRequest) => {
   );
   apiUrl.searchParams.append("season", season);
 
-  const res = await fetch(apiUrl, {
-    headers: {
-      "X-Auth-Token": process.env.NEXT_PUBLIC_FOOTBALL_API_KEY as string,
-    },
-  });
-  const data: TeamsDataType = await res.json();
+  const apiKey = process.env.NEXT_PUBLIC_FOOTBALL_API_KEY;
+  if (!apiKey)
+    return Response.json({ error: "API key is missing" }, { status: 500 });
 
-  return Response.json(data);
+  try {
+    const timeout = new Promise<Response>((_, reject) =>
+      setTimeout(() => reject(new Error("Request timeout")), 5000)
+    );
+
+    const res = await Promise.race([
+      fetchWithRetry(apiUrl.toString(), {
+        headers: { "X-Auth-Token": apiKey },
+      }),
+      timeout,
+    ]);
+
+    const data: TeamsDataType = await res.json();
+
+    return Response.json(data);
+  } catch (error) {
+    console.error("Fetch failed:", error);
+    throw Response.json(
+      { error: "Too many requests or timeout. Try again later." },
+      { status: 429 }
+    );
+  }
 };
