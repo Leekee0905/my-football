@@ -10,7 +10,10 @@ const ScheduleContainer = ({
 }) => {
   const pathName = usePathname();
   const isHome = !pathName.includes("/schedule");
-  const isEmpty = data?.error || data === undefined;
+  const isEmpty =
+    data?.error ||
+    data === undefined ||
+    (typeof data === "object" && Object.keys(data).length === 0);
 
   return (
     <div className="w-full">
