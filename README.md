@@ -1,14 +1,5 @@
 # MyFootBall
 
-## 해외 축구 일정 및 순위 확인
-
-기존 프로젝트 React + Nest.js -> Next.js app router로 마이그레이션 진행
-
-기존 프로젝트 링크 : https://github.com/Leekee0905/MyFootball
-
-![image](https://github.com/user-attachments/assets/e6f5c73e-6680-40ce-a666-31c860ec1c40)
-
-
 ## 소개
 
 해외 축구 리그 정보 제공 페이지입니다.
@@ -19,6 +10,10 @@ React + NestJS 를 사용한 프로젝트를 Next.js 의 Route Handler를 사용
     - 월별 일정
     - 팀별 일정
 - 리그별 순위
+
+기존 프로젝트 링크 : https://github.com/Leekee0905/MyFootball
+
+![image](https://github.com/user-attachments/assets/e6f5c73e-6680-40ce-a666-31c860ec1c40)
 
 ## 기술적 의사결정
 
